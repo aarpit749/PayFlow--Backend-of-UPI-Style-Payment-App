@@ -303,12 +303,44 @@ SQLSELECT * FROM USERS;SELECT * FROM TRANSACTIONS;
 With @RequestBody
 When @RequestBody is present, Spring reads the JSON body and converts it into a User object (via Jackson). Inside controller logging/debugging you will see populated fields.
 Example debug output (WITH @RequestBody):
-[PASTE YOUR PRINTLN/DEBUG OUTPUT HERE]
+curl -Method POST "http://localhost:1005/users" -Headers @{ "Content-Type" = "application/json" } -Body '{"name":"Priya","upiId":"priya@okaxis","phoneNumber":"9999999999","balance":5000}'
+
+
+StatusCode        : 200
+StatusDescription :
+Content           : {"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999999999"}
+RawContent        : HTTP/1.1 200
+                    Transfer-Encoding: chunked
+                    Keep-Alive: timeout=60
+                    Connection: keep-alive
+                    Content-Type: application/json
+                    Date: Tue, 26 May 2026 09:43:07 GMT
+
+                    {"userId":1,"name":"Priya","upiId":"pr...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Keep-Alive, timeout=60], [Connection, keep-alive], [Content-Type, application/json]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 94
 
 Without @RequestBody
 When @RequestBody is removed, Spring does not bind JSON body into the object. It looks for parameters from query string/form data, so fields remain null.
-Example debug output (WITHOUT @RequestBody):
-[PASTE YOUR PRINTLN/DEBUG OUTPUT HERE]
+Example debug output (WITHOUT @RequestBody):Received user: com.airtibe.java.payFlow.entity.User@64a899ad
+2026-05-26T15:16:58.703+05:30 ERROR 9860 --- [payFlow] [nio-1005-exec-5] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: jakarta.validation.ConstraintViolationException: Validation failed for classes [com.airtibe.java.payFlow.entity.User] during persist time for groups [jakarta.validation.groups.Default, ]
+List of constraint violations:[
+	ConstraintViolationImpl{interpolatedMessage='Balance cannot be null', propertyPath=balance, rootBeanClass=class com.airtibe.java.payFlow.entity.User, messageTemplate='Balance cannot be null'}
+	ConstraintViolationImpl{interpolatedMessage='UPIID cannot be blank', propertyPath=upiId, rootBeanClass=class com.airtibe.java.payFlow.entity.User, messageTemplate='UPIID cannot be blank'}
+	ConstraintViolationImpl{interpolatedMessage='Name cannot be blank', propertyPath=name, rootBeanClass=class com.airtibe.java.payFlow.entity.User, messageTemplate='Name cannot be blank'}
+]] with root cause
+
+jakarta.validation.ConstraintViolationException: Validation failed for classes [com.airtibe.java.payFlow.entity.User] during persist time for groups [jakarta.validation.groups.Default, ]
+List of constraint violations:[
+	ConstraintViolationImpl{interpolatedMessage='Balance cannot be null', propertyPath=balance, rootBeanClass=class com.airtibe.java.payFlow.entity.User, messageTemplate='Balance cannot be null'}
+	ConstraintViolationImpl{interpolatedMessage='UPIID cannot be blank', propertyPath=upiId, rootBeanClass=class com.airtibe.java.payFlow.entity.User, messageTemplate='UPIID cannot be blank'}
+	ConstraintViolationImpl{interpolatedMessage='Name cannot be blank', propertyPath=name, rootBeanClass=class com.airtibe.java.payFlow.entity.User, messageTemplate='Name cannot be blank'}
+]
 
 Explanation (1 paragraph):
 With @RequestBody, Spring MVC uses an HTTP message converter (Jackson) to deserialize JSON from the request body into the Java object. Without it, Spring does not treat JSON as input for binding and attempts to populate the object using request parameters instead, so the fields become null because no matching parameters were sent.
@@ -318,21 +350,27 @@ With @RequestBody, Spring MVC uses an HTTP message converter (Jackson) to deseri
 Endpoint:
 
 GET /users/upi/{upiId}
+curl.exe -i "http://localhost:1005/users/upi/priya@okaxis"
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 26 May 2026 09:59:08 GMT
 
-Example:
-Shellcurl http://localhost:1005/users/upi/arpit@okaxis
-Output:
-JSON[PASTE OUTPUT HERE]
+{"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999999999"}
+
 2) JPQL Query using @Query
 Example feature: find all users whose balance is above a given amount.
 Endpoint (example):
 
 GET /users/balance/above/{amount}
 
-Example:
-Shellcurl http://localhost:1005/users/balance/above/600
-Output:
-JSON[PASTE OUTPUT HERE]
+curl.exe -i "http://localhost:1005/users/balance?min=3000"
+HTTP/1.1 200 
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 26 May 2026 10:04:12 GMT
+
+[{"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999999999"}]
 
 ✅ Derived Methods vs @Query (JPQL) vs Native SQL (Task 6 write-up)
 1) Derived Query Methods (method-name based)
