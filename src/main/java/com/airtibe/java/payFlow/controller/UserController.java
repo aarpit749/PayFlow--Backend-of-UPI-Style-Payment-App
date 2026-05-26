@@ -15,7 +15,8 @@ public class UserController {
     private UserService _userService;
 
     @PostMapping
-    public User registerUser( @RequestBody User user){
+    public User registerUser(@RequestBody User user){
+        System.out.println("Received user: " + user);
         return _userService.registerUser(user);
     }
 
@@ -29,8 +30,13 @@ public class UserController {
         return _userService.getUserById(id);
     }
 
-//    @GetMapping
-//    public User findByUpiId(String upiId){
-//        return _userService.findByUpiId(upiId);
-//    }
+    @GetMapping("/upi/{upiId}")
+    public User findByUpiId(@PathVariable String upiId){
+        return _userService.findByUpiId(upiId);
+    }
+
+    @GetMapping("/balance")
+    public List<User> getUsersWithMinBalance(@RequestParam("min") Double minBalance) {
+        return _userService.getUsersWithBalanceGreaterThan(minBalance);
+    }
 }

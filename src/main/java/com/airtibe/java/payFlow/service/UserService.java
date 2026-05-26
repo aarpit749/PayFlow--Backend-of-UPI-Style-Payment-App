@@ -38,4 +38,7 @@ public class UserService {
         return _userRepository.findByUpiId(upiId).orElseThrow(() -> new RuntimeException("User not found with UPI id: " + upiId));
     }
 
+    public List<User> getUsersWithBalanceGreaterThan(Double minBalance) {
+        return _userRepository.findUsersWithBalanceGreaterThan(minBalance);
+    }
 }
