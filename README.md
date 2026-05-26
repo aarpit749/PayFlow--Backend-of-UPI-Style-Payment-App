@@ -352,36 +352,15 @@ Tied to database-specific SQL syntax
 Less portable (changing DB may break queries)
 Bypasses some ORM benefits (mapping optimizations, portability)
 
-
 ✅ Conceptual Write-Up (Answer in 3–5 sentences each)
-1) Request lifecycle
-Answer:
-[WRITE YOUR ANSWER HERE — include DispatcherServlet and HandlerAdapter]
-2) Serialisation
-Answer:
-[WRITE YOUR ANSWER HERE — mention Jackson, JSON key mismatch upi_id vs upiId]
-3) Spring Boot features
-Answer:
-[WRITE YOUR ANSWER HERE — embedded server, auto-config, defaults + project-specific examples]
-4) Spring vs Spring Boot
-Answer:
-[WRITE YOUR ANSWER HERE — manual config in Spring vs auto setup in Boot]
-5) Stateless REST
-Answer:
-[WRITE YOUR ANSWER HERE — statelessness + load balancer + scaling]
-6) Persistence
-Answer:
-[WRITE YOUR ANSWER HERE — List vs DB, restart loses data, unacceptable for payments]
+1) Request lifecycle: When a curl request like POST /users is sent, it first reaches the embedded Tomcat server running inside the Spring Boot application. The request is then handled by the DispatcherServlet, which acts as the front controller in Spring MVC. It looks for a suitable controller method using handler mappings and delegates the request to a Handler Adapter, which invokes the correct method (createUser). Before calling the method, Spring converts the request data into the required Java object. Finally, the controller method executes and returns the response, which is sent back to the client.
 
-✅ Submission Checklist
+2) Serialisation: Spring uses a library called Jackson to convert incoming JSON into a Java object like User. This happens automatically when we use @RequestBody in the controller method. Jackson maps JSON keys to Java fields based on matching names. If the JSON key is written as "upi_id" instead of "upiId", the mapping will fail and that field will either remain null or cause an error, because the names do not match the Java field naming convention. To handle such cases, annotations like @JsonProperty can be used.
 
- GitHub repo is public and named payflow-api (or similar)
- Project runs cleanly (mvn spring-boot:run)
- Write-up PDF/Word doc is in repo root with screenshots + answers
- curl commands + outputs pasted
- H2 screenshots included
- SQL CREATE TABLE statements included
- findByUpiId SQL + explanation included
- Task 6 endpoints + query comparison included
+3) Spring Boot features: Spring Boot provides three main features: embedded server, auto-configuration, and production-ready defaults. The embedded server is visible in this project because we run the app directly without deploying it separately to Tomcat. Auto-configuration is working when Spring automatically sets up things like database connection, JPA, and REST controllers based on dependencies added in the project. Production-ready defaults are seen in features like default logging, H2 database setup, and minimal configuration needed to start the application quickly. These features reduce manual setup and speed up development.
 
+4) Spring vs Spring Boot: If we had used plain Spring, we would have had to manually configure many things like setting up the Tomcat server, configuring beans, writing XML or Java config classes, and managing dependencies. Database configuration, dispatcher servlet setup, and view resolvers would also need explicit configuration. Spring Boot removes all this overhead by providing auto-configuration and starter dependencies. It automatically sets up the application based on what is present in the classpath. This makes development faster and less error-prone compared to traditional Spring.
 
+5) Stateless REST: Stateless means that each HTTP request is independent and the server does not store any information about previous requests. In the case of POST /transactions, every request contains all the necessary data needed to process it. This is important when the system runs on multiple servers behind a load balancer, because any server should be able to handle any request. There is no dependency on session data or previous interactions. This improves scalability and reliability of the application.
+
+6) Persistence: If transactions were stored in a Java List, all the data would be lost whenever the server restarts because the data only exists in memory. This makes it unreliable for real-world applications. By storing data in the H2 database, the records are persisted and can be queried when needed during the application runtime. Even though H2 in-memory resets on restart, it still demonstrates how real databases work. For a payments system, losing transaction data is unacceptable as it can lead to financial inconsistencies and trust issues.
