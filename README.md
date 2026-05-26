@@ -263,26 +263,27 @@ ParsedHtml        : mshtml.HTMLDocumentClass
 RawContentLength  : 94
 
 5) Send money (record transaction) — POST /transactions
-curl -Method POST "http://localhost:1005/transactions" -Headers @{ "Content-Type" = "application/json" } -Body '{"senderUpiId":"priya@okaxis","receiverUpiId":"aman@okhdfc","amount":250,"note":"Dinner split"}' 
-                                                                                                                               
+PS C:\payFlow> curl -Method POST "http://localhost:1005/transactions" -Headers @{ "Content-Type" = "application/json" } -Body '{"senderUpiId":"priya@okaxis","receiverUpiId":"arpit@okaxis","amount":250,"note":"Dinner split"}' 
+
+
 StatusCode        : 200
 StatusDescription :
-Content           : {"transactionId":1,"senderUpiId":"priya@okaxis","receiverUpiId":"aman@okhdfc","amount":250.0,"note":"Dinner split"}
+Content           : {"transactionId":2,"senderUpiId":"priya@okaxis","receiverUpiId":"arpit@okaxis","amount":250.0,"note":"Dinner split"}
 RawContent        : HTTP/1.1 200
                     Transfer-Encoding: chunked
                     Keep-Alive: timeout=60
                     Connection: keep-alive
                     Content-Type: application/json
-                    Date: Tue, 26 May 2026 08:58:10 GMT
+                    Date: Tue, 26 May 2026 09:07:00 GMT
 
-                    {"transactionId":1,"senderUpiId":"priy...
+                    {"transactionId":2,"senderUpiId":"priy...
 Forms             : {}
 Headers           : {[Transfer-Encoding, chunked], [Keep-Alive, timeout=60], [Connection, keep-alive], [Content-Type, application/json]...}
 Images            : {}
 InputFields       : {}
 Links             : {}
 ParsedHtml        : mshtml.HTMLDocumentClass
-RawContentLength  : 115
+RawContentLength  : 116
 
 ✅ H2 Console Screenshots (Task 2 & Task 5)
 Before inserting data (Task 2)
@@ -290,11 +291,13 @@ Before inserting data (Task 2)
 Screenshot output of:
 
 SQLSELECT * FROM USERS;SELECT * FROM TRANSACTIONS;
-![ALT text](Images/
+![ALT text](Images/EmptyUsers.png)
+![ALT text](Images/EmptyTransactions.png)
 After inserting users + transaction (Task 5)
 Run:
 SQLSELECT * FROM USERS;SELECT * FROM TRANSACTIONS;
-📸 [PASTE SCREENSHOT IN WRITE-UP PDF/DOC]
+![ALT text](Images/Users.png)
+![ALT text](Images/Transactions.png)
 
 ✅ Task 5: Demonstrate @RequestBody vs Without
 With @RequestBody
