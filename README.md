@@ -284,14 +284,13 @@ Links             : {}
 ParsedHtml        : mshtml.HTMLDocumentClass
 RawContentLength  : 115
 
-
 ✅ H2 Console Screenshots (Task 2 & Task 5)
 Before inserting data (Task 2)
 
 Screenshot output of:
 
 SQLSELECT * FROM USERS;SELECT * FROM TRANSACTIONS;
-📸 [PASTE SCREENSHOT IN WRITE-UP PDF/DOC]
+![ALT text](Images/
 After inserting users + transaction (Task 5)
 Run:
 SQLSELECT * FROM USERS;SELECT * FROM TRANSACTIONS;
