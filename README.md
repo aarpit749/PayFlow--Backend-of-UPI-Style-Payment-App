@@ -124,7 +124,6 @@ upiId (unique)
 phoneNumber (optional, unique)
 balance
 
-
 JPA converts camelCase fields like upiId to snake_case column names like upi_id depending on naming strategy.
 
 Transaction Entity
@@ -149,11 +148,9 @@ Derived query method:
 
 findByUpiId(String upiId)
 
-
 TransactionRepository
 
 Extends JpaRepository<Transaction, Long>
-
 
 ✅ Derived Query: findByUpiId explanation (Task 3)
 Spring Data JPA derives SQL from repository method names.
@@ -181,25 +178,112 @@ Transactions: /transactions
 Replace values as needed. All commands assume server running on port 1005.
 
 1) Register a user — POST /users
-Shellcurl -X POST http://localhost:1005/users \-H "Content-Type: application/json" \-d '{"name":"Arpit","upiId":"arpit@okaxis","phoneNumber":"9876543210","balance":100
-Output:
-JSON[PASTE OUTPUT HERE]Show more lines
+   curl -Method POST "http://localhost:1005/users" -Headers @{ "Content-Type" = "application/json" } -Body '{"name":"Priya","upiId":"priya@okaxis","phoneNumber":"9999999999","balance":5000}'
+
+StatusCode        : 200
+StatusDescription :
+Content           : {"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999999999"}
+RawContent        : HTTP/1.1 200
+                    Transfer-Encoding: chunked
+                    Keep-Alive: timeout=60
+                    Connection: keep-alive
+                    Content-Type: application/json
+                    Date: Tue, 26 May 2026 08:46:31 GMT
+
+                    {"userId":1,"name":"Priya","upiId":"pr...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Keep-Alive, timeout=60], [Connection, keep-alive], [Content-Type, application/json]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 94
+
 2) Register second user — POST /users
-Shellcurl -X POST http://localhost:1005/users \-H "Content-Type: application/json" \-d '{"name":"Priya","upiId":"priya@okaxis","phoneNumber":"9123456789","balance":500}
-Output:
-JSON[PASTE OUTPUT HERE]Show more lines
+curl -Method POST "http://localhost:1005/users" -Headers @{ "Content-Type" = "application/json" } -Body '{"name":"Arpit","upiId":"arpit@okaxis","phoneNumber":"123456789","balance":10000}' 
+
+StatusCode        : 200
+StatusDescription :
+Content           : {"userId":2,"name":"Arpit","upiId":"arpit@okaxis","balance":10000.0,"phoneNumber":"123456789"}
+RawContent        : HTTP/1.1 200
+                    Transfer-Encoding: chunked
+                    Keep-Alive: timeout=60
+                    Connection: keep-alive
+                    Content-Type: application/json
+                    Date: Tue, 26 May 2026 08:52:15 GMT
+
+                    {"userId":2,"name":"Arpit","upiId":"ar...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Keep-Alive, timeout=60], [Connection, keep-alive], [Content-Type, application/json]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 94
+
 3) List all users — GET /users
-Shellcurl http://localhost:1005/users
-Output:
-JSON[PASTE OUTPUT HERE]
+curl http://localhost:1005/users
+
+StatusCode        : 200
+StatusDescription :
+Content           : [{"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999999999"},{"userId":2,"name":"Arpit","upiId":"arpit 
+                    @okaxis","balance":10000.0,"phoneNumber":"123456789"}]
+RawContent        : HTTP/1.1 200
+                    Transfer-Encoding: chunked
+                    Content-Type: application/json
+                    Date: Tue, 26 May 2026 08:53:44 GMT
+
+                    [{"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"999...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Content-Type, application/json], [Date, Tue, 26 May 2026 08:53:44 GMT]}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 191
+
 4) Get user by ID — GET /users/{id}
-Shellcurl http://localhost:1005/users/1
-Output:
-JSON[PASTE OUTPUT HERE]
+PS C:\payFlow> curl http://localhost:1005/users/1
+
+StatusCode        : 200
+StatusDescription :
+Content           : {"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999999999"}
+RawContent        : HTTP/1.1 200
+                    Transfer-Encoding: chunked
+                    Content-Type: application/json
+                    Date: Tue, 26 May 2026 08:55:22 GMT
+
+                    {"userId":1,"name":"Priya","upiId":"priya@okaxis","balance":5000.0,"phoneNumber":"9999...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Content-Type, application/json], [Date, Tue, 26 May 2026 08:55:22 GMT]}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 94
+
 5) Send money (record transaction) — POST /transactions
-Shellcurl -X POST http://localhost:1005/transactions \-H "Content-Type: application/json" \-d '{"senderUpiId":"arpit@okaxis","receiverUpiId":"priya@okaxis","amount":200,"note":"Dinner split"}'
-Output:
-JSON[PASTE OUTPUT HERE]
+curl -Method POST "http://localhost:1005/transactions" -Headers @{ "Content-Type" = "application/json" } -Body '{"senderUpiId":"priya@okaxis","receiverUpiId":"aman@okhdfc","amount":250,"note":"Dinner split"}' 
+                                                                                                                               
+StatusCode        : 200
+StatusDescription :
+Content           : {"transactionId":1,"senderUpiId":"priya@okaxis","receiverUpiId":"aman@okhdfc","amount":250.0,"note":"Dinner split"}
+RawContent        : HTTP/1.1 200
+                    Transfer-Encoding: chunked
+                    Keep-Alive: timeout=60
+                    Connection: keep-alive
+                    Content-Type: application/json
+                    Date: Tue, 26 May 2026 08:58:10 GMT
+
+                    {"transactionId":1,"senderUpiId":"priy...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Keep-Alive, timeout=60], [Connection, keep-alive], [Content-Type, application/json]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 115
+
 
 ✅ H2 Console Screenshots (Task 2 & Task 5)
 Before inserting data (Task 2)
